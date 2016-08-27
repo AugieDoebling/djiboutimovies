@@ -8,7 +8,7 @@ def movie_page(request):
     return render(request, 'movies/index.html', context)
 
 
-# def movie_page(request, genre):
-#     movie_list = Movie.objects.order_by('title')
-#     context = {'movie_list' : movie_list, "genre" : genre}
-#     return render(request, 'movies/index.html', context)
+def genre_page(request, genre=None):
+    movie_list = Movie.objects.order_by('title')
+    context = {'movie_list' : movie_list, "genre" : genre}
+    return render(request, 'movies/index.html', context)
