@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Djibouti Movie Server</title>
+
+ 	{% load static %}
+	<link rel="stylesheet" type="text/css" href="{% static 'movies/indexstyle.css' %}" />
+
+	<!-- roboto font import -->
+	<link href='http://fonts.googleapis.com/css?family=Bangers|Roboto:300' rel='stylesheet' type='text/css'>
+	<!-- <link href="https://fonts.googleapis.com/css?family=Baloo+Bhaina" rel="stylesheet"> -->
+
+	<!-- Polymar imports -->
+	<link rel = "import" href = "{% static 'bower_components/polymer/polymer.html' %}" />
+	<link rel = "import" href = "{% static 'bower_components/core-ajax/core-ajax.html' %}" />
+
+	<!-- browser test import -->
+	<link rel="import" href="{% static 'bower_components/core-pages/core-pages.html' %}" />
+
+	<!-- ripple effect import -->
+	<link rel="import" href="{% static 'bower_components/paper-ripple/paper-ripple.html' %}" />
+
+	<!-- paper imports -->
+	<link href="{% static 'bower_components/paper-input/paper-input.html' %}" rel="import">
+	<link href="{% static 'bower_components/paper-card/paper-card.html' %}" rel="import">
+	<link href="{% static 'bower_components/paper-button/paper-button.html' %}" rel="import">
+	<link href="{% static 'bower_components/iron-icons/iron-icons.html' %}" rel="import">
+
+	<link rel="shortcut icon" href="{% static 'movies/images/favicon.png' %}">
+</head>
+<body fullbleed unresolved>
+
+	<p>{{genre}}</p>
+
+	<div class="titlebar">
+		<p id="pagetitle">Djibouti Movies</p>
+		<form id = "search" method="get" action="http://www.google.com/search">
+			<paper-input class="papersearch" label="Search Movies" >
+				<input is = "core-input" type = "text" name="q" size="31" maxlength="255">
+			</paper-input>
+ 		</form>
+	</div>
+
+
+	<div class="genrebar">
+	</div>
+
+	<div class="results">
+
+	{% if movie_list %}
+	    {% for movie in movie_list %}
+
+		    <paper-card image={{movie.img_url}}>
+				<div class="card-content">
+					<div class="cafe-header">{{ movie.title }}
+						<div class="cafe-location cafe-light">
+							<iron-icon class="star" icon="star"></iron-icon>
+							<span>{{ movie.imdb_rating }}</span>
+						</div>
+					</div>
+					<p class="info">{{ movie.year }}・{{ movie.genre_one }}, {{ movie.genre_two }}, {{ movie.genre_three }}</p>
+					<p class="cafe-light">{{ movie.description }}</p>
+				</div>
+			</paper-card>
+
+	    {% endfor %}
+	{% else %}
+	    <p>No movies are available.</p>
+	{% endif %}
+	</div>
+
+
+</body>
+</html>
