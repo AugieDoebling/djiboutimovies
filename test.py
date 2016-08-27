@@ -7,8 +7,8 @@ movies = [("Killers 2010", "test.mov"), ("Back to the Future 1985", "test.mov"),
 def main():
     command = sys.argv[1]
     if(command == "add"):
-        if(int(sys.argv[2]) > 5):
-            print("please < 5")
+        if(int(sys.argv[2]) > 4):
+            print("please < 4")
             return
         else:
             for i in range(int(sys.argv[2])):

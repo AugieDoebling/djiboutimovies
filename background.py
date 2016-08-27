@@ -3,6 +3,7 @@ import json
 import os
 import shutil
 import sqlite3
+import dbutils
 
 INPUT_FILE_FOLDER = "/Users/augiedoebling/media"
 OUTPUT_FILE_FOLDER = "/Users/augiedoebling/media/moved"
@@ -20,7 +21,11 @@ def run():
 
 def genMovieInfo(title, year, fileurl):
     title = title.replace(' ', "%20")
-    requrl = "http://www.omdbapi.com/?t=" + title + "&y=" + year + "&plot=short&r=json"
+    requrl = ""
+    if(year != None):
+        requrl = "http://www.omdbapi.com/?t=" + title + "&y=" + year + "&plot=short&r=json"
+    else:
+        requrl = "http://www.omdbapi.com/?t=" + title + "&plot=short&r=json"
 
     response = requests.get(requrl)
     movie = json.loads(response.text)
@@ -54,10 +59,17 @@ def saveMovieInfo(filename, fileurl):
     db = sqlite3.connect("db.sqlite3")
     count = int(db.execute("SELECT count(*) from movies_movie").fetchall()[0][0])
 
-    title = filename[:len(filename) - 5]
+    title = ""
     year = filename[len(filename)-4:]
+    try:
+        int(year)
+        title = filename[:len(filename) - 5]
+    except:
+        title = filename
+        year = None
 
-    #TODO: CHECK DUPLICATE RECORDS
+    if(dbutils.doesmovieexist(title, year)):
+        return
 
     insert = "INSERT INTO movies_movie VALUES ('" + str(count + 1) + "', " + genMovieInfo(title, year, fileurl) + ")"
     message = db.execute(insert)
