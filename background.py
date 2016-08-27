@@ -18,10 +18,8 @@ def run():
             saveMovieInfo(file, OUTPUT_FILE_FOLDER+file)
 
 
-def genMovieInfo(filename, fileurl):
-    title = filename[:len(filename)-5]
+def genMovieInfo(title, year, fileurl):
     title = title.replace(' ', "%20")
-    year = filename[len(filename)-4:]
     requrl = "http://www.omdbapi.com/?t=" + title + "&y=" + year + "&plot=short&r=json"
 
     response = requests.get(requrl)
@@ -42,9 +40,9 @@ def genMovieInfo(filename, fileurl):
     return ("'" + movie["Title"] + sep +
             movie["Year"] + sep +
             runtime + sep +
-            one + sep +
-            two + sep +
-            three + sep +
+            one.replace("-", "").strip() + sep +
+            two.replace("-", "").strip() + sep +
+            three.replace("-", "").strip() + sep +
             movie["imdbRating"] + sep +
             movie["Rated"] + sep +
             movie["Plot"] + sep +
@@ -55,7 +53,13 @@ def genMovieInfo(filename, fileurl):
 def saveMovieInfo(filename, fileurl):
     db = sqlite3.connect("db.sqlite3")
     count = int(db.execute("SELECT count(*) from movies_movie").fetchall()[0][0])
-    insert = "INSERT INTO movies_movie VALUES ('" + str(count + 1) + "', " + genMovieInfo(filename, fileurl) + ")"
+
+    title = filename[:len(filename) - 5]
+    year = filename[len(filename)-4:]
+
+    #TODO: CHECK DUPLICATE RECORDS
+
+    insert = "INSERT INTO movies_movie VALUES ('" + str(count + 1) + "', " + genMovieInfo(title, year, fileurl) + ")"
     message = db.execute(insert)
     db.commit()
     db.close()
@@ -66,5 +70,3 @@ def isMovie(file):
         if(file.endswith(form)):
             return True
     return False
-
-saveMovieInfo("the town 2010", "test.mov")

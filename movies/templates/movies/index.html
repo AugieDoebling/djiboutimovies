@@ -33,34 +33,68 @@
 
 	<div class="titlebar">
 		<p id="pagetitle">Djibouti Movies</p>
-		<form id = "search" method="get" action="http://www.google.com/search">
+<!-- 		<form id = "search" method="get" action="http://www.google.com/search">
 			<paper-input class="papersearch" label="Search Movies" >
 				<input is = "core-input" type = "text" name="q" size="31" maxlength="255">
 			</paper-input>
- 		</form>
+ 		</form> -->
 	</div>
 
 
 	<div class="genrebar">
+		<div class="genreheader">Genres</div>
+
+<!-- 		["Short", "Drama", "Comedy", "Documentary", "Adult", "Action", "Romance", "Thriller", "Animation", "Family",
+          "Crime", "Horror", "Music", "Adventure", "Fantasy", "Sci-Fi", "Mystery", "Biography", "Sport", "History",
+          "Musical", "Western", "War", "Reality-TV", "News", "Talk-Show", "Game-Show"] -->
+
+		<a href="/movies/"> <paper-button class="custom indigo"/>All</paper-button></a>
+		<a href="/movies/Action/"> <paper-button class="custom indigo"/>Action</paper-button></a>
+		<a href="/movies/Adventure/"> <paper-button class="custom indigo"/>Adventure</paper-button></a>
+		<a href="/movies/Animation/"> <paper-button class="custom indigo"/>Animation</paper-button></a>
+		<a href="/movies/Biography/"> <paper-button class="custom indigo"/>Biography</paper-button></a>
+		<a href="/movies/Comedy/"> <paper-button class="custom indigo"/>Comedy</paper-button></a>
+		<a href="/movies/Crime/"> <paper-button class="custom indigo"/>Crime</paper-button></a>
+		<a href="/movies/Documentary/"> <paper-button class="custom indigo">Documentary</paper-button></a>
+		<a href="/movies/Drama/"> <paper-button class="custom indigo">Drama</paper-button></a>
+		<a href="/movies/Fantasy/"> <paper-button class="custom indigo"/>Fantasy</paper-button></a>
+		<a href="/movies/GameShow/"> <paper-button class="custom indigo">Game-Show</paper-button></a>
+		<a href="/movies/History/"> <paper-button class="custom indigo"/>History</paper-button></a>
+		<a href="/movies/Horror/"> <paper-button class="custom indigo"/>Horror</paper-button></a>
+		<a href="/movies/Music/"> <paper-button class="custom indigo"/>Music</paper-button></a>
+		<a href="/movies/Musical/"> <paper-button class="custom indigo"/>Musical</paper-button></a>
+		<a href="/movies/Mystery/"> <paper-button class="custom indigo"/>Mystery</paper-button></a>
+		<a href="/movies/News/"> <paper-button class="custom indigo"/>News</paper-button></a>
+		<a href="/movies/RealityTV/"> <paper-button class="custom indigo"/>Reality-TV</paper-button></a>
+		<a href="/movies/Romance/"> <paper-button class="custom indigo"/>Romance</paper-button></a>
+		<a href="/movies/SciFi/"> <paper-button class="custom indigo"/>Sci-Fi</paper-button></a>
+		<a href="/movies/Short/"> <paper-button class="custom indigo"/>Short</paper-button></a>
+		<a href="/movies/Sport/"> <paper-button class="custom indigo"/>Sport</paper-button></a>
+		<a href="/movies/TalkShow/"> <paper-button class="custom indigo"/>Talk-Show</paper-button></a>
+		<a href="/movies/Thriller/"> <paper-button class="custom indigo"/>Thriller</paper-button></a>
+		<a href="/movies/War/"> <paper-button class="custom indigo"/>War</paper-button></a>
+		<a href="/movies/Western/"> <paper-button class="custom indigo"/>Western</paper-button></a>
 	</div>
 
 	<div class="results">
 
 	{% if movie_list %}
 	    {% for movie in movie_list %}
+	    	{% if genre == None or movie.genre_one == genre or movie.genre_two == genre or movie.genre_three == genre%}
 
-		    <paper-card image={{movie.img_url}}>
-				<div class="card-content">
-					<div class="cafe-header">{{ movie.title }}
-						<div class="cafe-location cafe-light">
-							<iron-icon class="star" icon="star"></iron-icon>
-							<span>{{ movie.imdb_rating }}</span>
+			    <paper-card image={{movie.img_url}}>
+					<div class="card-content">
+						<div class="cafe-header">{{ movie.title }}
+							<div class="cafe-location cafe-light">
+								<iron-icon class="star" icon="star"></iron-icon>
+								<span>{{ movie.imdb_rating }}</span>
+							</div>
 						</div>
+						<p class="info">{{ movie.year }}・{{ movie.genre_one }}, {{ movie.genre_two }}, {{ movie.genre_three }}</p>
+						<p class="cafe-light">{{ movie.description }}</p>
 					</div>
-					<p class="info">{{ movie.year }}・{{ movie.genre_one }}, {{ movie.genre_two }}, {{ movie.genre_three }}</p>
-					<p class="cafe-light">{{ movie.description }}</p>
-				</div>
-			</paper-card>
+				</paper-card>
+			{% endif %}
 
 	    {% endfor %}
 	{% else %}

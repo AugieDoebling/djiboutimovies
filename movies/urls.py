@@ -4,5 +4,5 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.genre_page),
-    url(r'^([0-9]{4})/$', views.genre_page),
+    url(r'^(?P<genre>\w{0,15})/$', views.genre_page),
 ]
