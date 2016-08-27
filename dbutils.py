@@ -1,6 +1,12 @@
 import sqlite3
 import sys
+import os
+from django.core import management
+from djiboutimovies import settings
 
+
+def setup():
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "djiboutimovies.settings")
 
 def dbdrop():
     db = sqlite3.connect("db.sqlite3")
@@ -41,6 +47,8 @@ def main():
         select()
     elif(command == "exist"):
         print(doesmovieexist(sys.argv[2], sys.argv[3]))
+    elif(command == "setup"):
+        setup()
 
 if __name__ == "__main__":
     main()

@@ -19,4 +19,5 @@ if __name__ == "__main__":
                 "forget to activate a virtual environment?"
             )
         raise
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "djiboutimovies.settings")
     execute_from_command_line(sys.argv)

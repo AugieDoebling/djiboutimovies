@@ -1,22 +1,29 @@
+import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "djiboutimovies.settings")
+import django
+django.setup()
 import requests
 import json
 import os
 import shutil
 import sqlite3
 import dbutils
+import sys
+from movies.models import Movie
 
-INPUT_FILE_FOLDER = "/Users/augiedoebling/media"
-OUTPUT_FILE_FOLDER = "/Users/augiedoebling/media/moved"
 
-GENRES = ["Short", "Drama", "Comedy", "Documentary", "Adult", "Action", "Romance", "Thriller", "Animation", "Family",
-          "Crime", "Horror", "Music", "Adventure", "Fantasy", "Sci-Fi", "Mystery", "Biography", "Sport", "History",
-          "Musical", "Western", "War", "Reality-TV", "News", "Talk-Show", "Game-Show"]
+INPUT_FILE_FOLDER = "/Users/augiedoebling/media/"
+OUTPUT_FILE_FOLDER = "/Users/augiedoebling/media/moved/"
+
 
 def run():
     for file in os.listdir(INPUT_FILE_FOLDER):
         if(isMovie(file)):
-            shutil.move(INPUT_FILE_FOLDER+file, OUTPUT_FILE_FOLDER+file)
-            saveMovieInfo(file, OUTPUT_FILE_FOLDER+file)
+            #shutil.move(INPUT_FILE_FOLDER+file, OUTPUT_FILE_FOLDER+file)
+            try:
+                saveMovieInfo(file.split(".")[0], OUTPUT_FILE_FOLDER+file)
+            except:
+                print(file)
 
 
 def genMovieInfo(title, year, fileurl):
@@ -31,6 +38,7 @@ def genMovieInfo(title, year, fileurl):
     movie = json.loads(response.text)
 
     if(movie["Response"] == "False"):
+        print("cant get " + requrl)
         raise FileNotFoundError
 
     # print(movie)
@@ -42,17 +50,29 @@ def genMovieInfo(title, year, fileurl):
     runtime = movie["Runtime"][:len(movie["Runtime"])-4]
     sep = "', '"
 
-    return ("'" + movie["Title"] + sep +
-            movie["Year"] + sep +
-            runtime + sep +
-            one.replace("-", "").strip() + sep +
-            two.replace("-", "").strip() + sep +
-            three.replace("-", "").strip() + sep +
-            movie["imdbRating"] + sep +
-            movie["Rated"] + sep +
-            movie["Plot"] + sep +
-            movie["Poster"] + sep +
-            fileurl + "'")
+    return (movie["Title"],
+            movie["Year"],
+            runtime,
+            one.replace("-", "").strip(),
+            two.replace("-", "").strip(),
+            three.replace("-", "").strip(),
+            movie["imdbRating"],
+            movie["Rated"],
+            movie["Plot"].replace("'", ""),
+            movie["Poster"],
+            fileurl)
+
+    # return ("'" + movie["Title"] + sep +
+    #         movie["Year"] + sep +
+    #         runtime + sep +
+    #         one.replace("-", "").strip() + sep +
+    #         two.replace("-", "").strip() + sep +
+    #         three.replace("-", "").strip() + sep +
+    #         movie["imdbRating"] + sep +
+    #         movie["Rated"] + sep +
+    #         movie["Plot"].replace("'", "") + sep +
+    #         movie["Poster"] + sep +
+    #         fileurl + "'")
 
 
 def saveMovieInfo(filename, fileurl):
@@ -71,10 +91,13 @@ def saveMovieInfo(filename, fileurl):
     if(dbutils.doesmovieexist(title, year)):
         return
 
-    insert = "INSERT INTO movies_movie VALUES ('" + str(count + 1) + "', " + genMovieInfo(title, year, fileurl) + ")"
-    message = db.execute(insert)
-    db.commit()
-    db.close()
+    movtup = genMovieInfo(title, year, fileurl)
+    #print(movtup)
+
+    p = Movie(title=movtup[0], year=movtup[1], running_time_min=movtup[2], genre_one=movtup[3], genre_two=movtup[4],
+              genre_three=movtup[5], imdb_rating=movtup[6], rating=movtup[7], description=movtup[8], img_url=movtup[9],
+              file_url=movtup[10])
+    p.save()
 
 def isMovie(file):
     formats = ["avi", "flv", "m4v", "mkv", "mov", "mp4", "m4v", "mpg", "wmv"]
@@ -82,3 +105,7 @@ def isMovie(file):
         if(file.endswith(form)):
             return True
     return False
+
+if __name__ == "__main__":
+    if(sys.argv[1] == "run"):
+        run()

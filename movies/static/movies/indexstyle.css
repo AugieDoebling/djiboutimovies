@@ -55,7 +55,7 @@ a {
 	z-index: -1;
 
 	height: 100%;
-	width: 18%;
+	width: 19%;
 
 }
 
@@ -90,12 +90,21 @@ a {
    	margin-bottom: 0.5vw;
   }
 
+.genrebar paper-button.yellow {
+    background-color: #FFAB00;
+    color: #424242;
+    display: inline-block;
+    text-align: center;
+
+   	margin-bottom: 0.5vw;
+  }
+
 
 .results {
 	display: inline-table;
 	float: right;
 
-	width: 82%;
+	width: 81%;
 	height: 100%;
 
 	/*padding: 2vw;*/
