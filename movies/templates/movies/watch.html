@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Watch {{movie.title}}</title>
+
+ 	{% load static %}
+	<link rel="stylesheet" type="text/css" href="{% static 'movies/streamstyle.css' %}" />
+
+	<!-- roboto font import -->
+	<link href='http://fonts.googleapis.com/css?family=Bangers|Roboto:300' rel='stylesheet' type='text/css'>
+	<!-- <link href="https://fonts.googleapis.com/css?family=Baloo+Bhaina" rel="stylesheet"> -->
+
+	<!-- Polymar imports -->
+	<link rel = "import" href = "{% static 'bower_components/polymer/polymer.html' %}" />
+	<link rel = "import" href = "{% static 'bower_components/core-ajax/core-ajax.html' %}" />
+
+	<!-- browser test import -->
+	<link rel="import" href="{% static 'bower_components/core-pages/core-pages.html' %}" />
+
+	<!-- ripple effect import -->
+	<link rel="import" href="{% static 'bower_components/paper-ripple/paper-ripple.html' %}" />
+
+	<!-- paper imports -->
+	<!-- <link href="{% static 'bower_components/paper-input/paper-input.html' %}" rel="import"> -->
+	<!-- <link href="{% static 'bower_components/paper-card/paper-card.html' %}" rel="import"> -->
+	<!-- <link href="{% static 'bower_components/paper-button/paper-button.html' %}" rel="import"> -->
+	<!-- <link href="{% static 'bower_components/iron-icons/iron-icons.html' %}" rel="import"> -->
+
+	<!-- Video JS Import  -->
+	<link href="http://vjs.zencdn.net/5.11.6/video-js.css" rel="stylesheet">
+
+	<link rel="shortcut icon" href="{% static 'movies/images/favicon.png' %}">
+</head>
+<body fullbleed unresolved>
+
+	<p>{{movie.file_url}}</p>
+
+	<video id="my-video" class="video-js" controls preload="auto" width="640" height="264"
+  		poster={{movie.img_url}} data-setup="{}">
+    <source src="http://techslides.com/demos/sample-videos/small.mp4" type='video/mp4'>
+    <!-- <source src="MY_VIDEO.webm" type='video/webm'> -->
+    <p class="vjs-no-js">
+      To view this video please enable JavaScript, and consider upgrading to a web browser that
+      <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+    </p>
+  </video>
+
+
+</body>
+</html>

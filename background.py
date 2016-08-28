@@ -13,7 +13,7 @@ from movies.models import Movie
 
 
 INPUT_FILE_FOLDER = "/Users/augiedoebling/media/"
-OUTPUT_FILE_FOLDER = "/Users/augiedoebling/media/moved/"
+OUTPUT_FILE_FOLDER = "/Users/augiedoebling/media/"
 
 
 def run():
@@ -22,8 +22,9 @@ def run():
             #shutil.move(INPUT_FILE_FOLDER+file, OUTPUT_FILE_FOLDER+file)
             try:
                 saveMovieInfo(file.split(".")[0], OUTPUT_FILE_FOLDER+file)
-            except:
+            except Exception:
                 print(file)
+                print(sys.exc_info()[0])
 
 
 def genMovieInfo(title, year, fileurl):
@@ -62,18 +63,6 @@ def genMovieInfo(title, year, fileurl):
             movie["Poster"],
             fileurl)
 
-    # return ("'" + movie["Title"] + sep +
-    #         movie["Year"] + sep +
-    #         runtime + sep +
-    #         one.replace("-", "").strip() + sep +
-    #         two.replace("-", "").strip() + sep +
-    #         three.replace("-", "").strip() + sep +
-    #         movie["imdbRating"] + sep +
-    #         movie["Rated"] + sep +
-    #         movie["Plot"].replace("'", "") + sep +
-    #         movie["Poster"] + sep +
-    #         fileurl + "'")
-
 
 def saveMovieInfo(filename, fileurl):
     db = sqlite3.connect("db.sqlite3")
@@ -90,6 +79,7 @@ def saveMovieInfo(filename, fileurl):
 
     if(dbutils.doesmovieexist(title, year)):
         return
+    #TODO: https://docs.djangoproject.com/en/1.10/topics/db/queries/
 
     movtup = genMovieInfo(title, year, fileurl)
     #print(movtup)
@@ -98,6 +88,7 @@ def saveMovieInfo(filename, fileurl):
               genre_three=movtup[5], imdb_rating=movtup[6], rating=movtup[7], description=movtup[8], img_url=movtup[9],
               file_url=movtup[10])
     p.save()
+
 
 def isMovie(file):
     formats = ["avi", "flv", "m4v", "mkv", "mov", "mp4", "m4v", "mpg", "wmv"]

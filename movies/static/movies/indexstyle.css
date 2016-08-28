@@ -4,10 +4,7 @@ body {
 
     font-family: 'Roboto', sans-serif;
  	font-weight: 300;
-}
-
-a {
-    color: green;
+ 	text-decoration: none;
 }
 
 .titlebar {
@@ -116,6 +113,7 @@ a {
 
 .paper-card-0 .info {
 	font-size: 15px;
+	color: black;
 
 	margin-top: 5px;
 	margin-bottom: 5px;

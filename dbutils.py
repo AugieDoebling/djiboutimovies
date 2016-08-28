@@ -1,8 +1,12 @@
+import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "djiboutimovies.settings")
+import django
+django.setup()
 import sqlite3
 import sys
-import os
 from django.core import management
 from djiboutimovies import settings
+from movies.models import Movie
 
 
 def setup():
@@ -39,6 +43,10 @@ def doesmovieexist(title, year):
     db.close()
     return False
 
+def query():
+    res = Movie.objects.get(id='118')
+    print(res.title)
+
 def main():
     command = sys.argv[1]
     if(command == "dbdrop"):
@@ -49,6 +57,8 @@ def main():
         print(doesmovieexist(sys.argv[2], sys.argv[3]))
     elif(command == "setup"):
         setup()
+    elif (command == "query"):
+        query()
 
 if __name__ == "__main__":
     main()

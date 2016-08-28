@@ -81,19 +81,22 @@
 	{% if movie_list %}
 	    {% for movie in movie_list %}
 	    	{% if genre == None or movie.genre_one == genre or movie.genre_two == genre or movie.genre_three == genre%}
-
-			    <paper-card image={{movie.img_url}}>
-					<div class="card-content">
-						<div class="cafe-header">{{ movie.title }}
-							<div class="cafe-location cafe-light">
-								<iron-icon class="star" icon="star"></iron-icon>
-								<span>{{ movie.imdb_rating }}</span>
+	    		<a href="file://users{{movie.file_url}}">
+				    <paper-card image={{movie.img_url}}>
+				    	<!-- <a href="file://users{{movie.file_url}}"> -->
+							<div class="card-content">
+								<div class="cafe-header">{{ movie.title }}
+									<div class="cafe-location cafe-light">
+										<iron-icon class="star" icon="star"></iron-icon>
+										<span>{{ movie.imdb_rating }}</span>
+									</div>
+								</div>
+								<p class="info">{{ movie.year }}・{{ movie.genre_one }}, {{ movie.genre_two }}, {{ movie.genre_three }}</p>
+								<p class="cafe-light">{{ movie.description }}</p>
 							</div>
-						</div>
-						<p class="info">{{ movie.year }}・{{ movie.genre_one }}, {{ movie.genre_two }}, {{ movie.genre_three }}</p>
-						<p class="cafe-light">{{ movie.description }}</p>
-					</div>
-				</paper-card>
+						<!-- </a> -->
+					</paper-card>
+				</a>
 			{% endif %}
 
 	    {% endfor %}
