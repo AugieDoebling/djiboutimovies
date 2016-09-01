@@ -5,7 +5,7 @@ def parseFileName(filename):
     yearindex = -1
 
     name = filename[:filename.rfind(".")]
-    print name
+    # print name
     name = name.replace(".", " ")
     name = name.replace(",", " ")
     name = name.replace("-", " ")
@@ -32,7 +32,8 @@ def parseFileName(filename):
         if movie['Response'] == 'True':
             return movie
 
-    print "Can not find movie" + filename
+    print "******* Can not find movie" + filename
+    return None
 
 
 
