@@ -40,7 +40,7 @@ def genMovieInfo(title, year, fileurl):
 
     if(movie["Response"] == "False"):
         print("cant get " + requrl)
-        raise FileNotFoundError
+        raise LookupError
 
     # print(movie)
 
