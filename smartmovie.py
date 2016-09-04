@@ -14,7 +14,7 @@ def parseFileName(filename):
     # print(words)
 
     # if yifi == words[len(words)-1]:
-    for i in range(len(words)-1):
+    for i in range(len(words)):
         # print words[i]
         if words[i].isdigit() and len(words[i]) == 4:
             yearindex = i
@@ -23,6 +23,8 @@ def parseFileName(filename):
             words[i] = words[i][1:5]
             yearindex = i
             break
+
+    # print(yearindex)
 
     if yearindex != -1:
         reqtitle = "%20".join(words[:yearindex])

@@ -10,11 +10,16 @@ def moveAndRename(fromPathFile, toPath):
     if movie is not None:
         newname = movie['Title'] + " " + movie['Year'] + fromPathFile[fromPathFile.rfind("."):]
 
-        toPathFile = toPath + newname
+        toPathFile = toPath + "/" + newname
 
-        os.rename(fromPathFile, toPathFile)
-        print "moved " + newname + " to " + toPath
-        return (movie, toPathFile)
+        if(fromPathFile != toPathFile):
+            # os.rename(fromPathFile, toPathFile)
+            print "moved " + newname + " to " + toPath
+            return (movie, toPathFile)
+        else:
+            print("didnt move " + newname)
+            return None
+
 
 
 def mirgateDirectory(fromHomeDir, toPath):
@@ -25,22 +30,39 @@ def mirgateDirectory(fromHomeDir, toPath):
     homedirs = next(os.walk(fromHomeDir))[1]
 
     for file in homefiles:
-        if os.stat(fromHomeDir + file).st_size > minfilesize:
-            # print(fromHomeDir + file)
-            record.append(moveAndRename(fromHomeDir + file, toPath))
+        pathFile = fromHomeDir + "/" + file
+        if os.stat(pathFile).st_size > minfilesize and isMovie(pathFile):
+            # print(pathFile)
+            insert = moveAndRename(pathFile, toPath)
+            if insert != None:
+                record.append(insert)
 
     for dir in homedirs:
-        for file in next(os.walk(fromHomeDir + dir))[2]:
-            if os.stat(fromHomeDir + dir + "/"+ file).st_size > minfilesize:
-                # print(fromHomeDir + dir + "/" + file)
-                record.append(moveAndRename(fromHomeDir + dir + "/" + file, toPath))
-        for subdir in next(os.walk(fromHomeDir + dir))[1]:
-            for subfile in next(os.walk(fromHomeDir + dir + "/" + subdir))[2]:
-                if os.stat(fromHomeDir + dir + "/" + subdir + "/" + subfile).st_size > minfilesize:
-                    # print(fromHomeDir + dir + "/" + subdir + "/" + subfile)
-                    record.append(moveAndRename(fromHomeDir + dir + "/" + subdir + "/" + subfile, toPath))
+        for file in next(os.walk(fromHomeDir + "/" + dir))[2]:
+            subPathFile = fromHomeDir + "/" + dir + "/" + file
+            if os.stat(subPathFile).st_size > minfilesize and isMovie(subPathFile):
+                # print(subPathFile)
+                insert = moveAndRename(subPathFile, toPath)
+                if insert != None:
+                    record.append(insert)
+
+        for subdir in next(os.walk(fromHomeDir + "/" + dir))[1]:
+            for subfile in next(os.walk(fromHomeDir + "/" + dir + "/" + subdir))[2]:
+                subSubPathFile = fromHomeDir + "/" + dir + "/" + subdir + "/" + subfile
+                if os.stat(subSubPathFile).st_size > minfilesize and isMovie(subSubPathFile):
+                    # print(subSubPathFile)
+                    insert = moveAndRename(subSubPathFile, toPath)
+                    if insert != None:
+                        record.append(insert)
 
     print "*****    Finished Migrating " + fromHomeDir + " to " + toPath + "    *****"
+
+def isMovie(file):
+    formats = ["avi", "flv", "m4v", "mkv", "mov", "mp4", "m4v", "mpg", "wmv"]
+    for form in formats:
+        if(file.endswith(form)):
+            return True
+    return False
 
 def main():
     command = sys.argv[1]
@@ -49,6 +71,9 @@ def main():
 
     elif command == "migrate":
         mirgateDirectory(sys.argv[2], sys.argv[3])
+
+    else:
+        print("command does not exist : " + command)
 
 if __name__ == "__main__":
     main()
